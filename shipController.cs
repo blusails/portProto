@@ -55,25 +55,32 @@ public class shipController : MonoBehaviour {
         movePath = conditionPath(path);
         print(movePath.Length);
         moving = true;
-        previousAdvanceVec = Vector3.MoveTowards(shipTransform.position, movePath[pathIndex], 1.0f);
+
+        advanceVec = movePath[pathIndex] - shipTransform.position;
+        advanceVec.Normalize();
+        
+        tolAngle = 15;
     }
 
 
     public float moveStep;
+    private float tolAngle;
+
     void advancePosition()
     {
 
-        advanceVec = movePath[pathIndex] - shipTransform.position;
-        advanceVec.Normalize();
 
-        print(Vector3.Angle(advanceVec, previousAdvanceVec));
-        if (Vector3.Angle(advanceVec, previousAdvanceVec) > 10.0f)
+
+        print(Vector3.Angle(advanceVec, movePath[pathIndex] - shipTransform.position));
+        if (Vector3.Angle(advanceVec, movePath[pathIndex] - shipTransform.position) > tolAngle)
         {
+            tolAngle = 15;
             pathIndex++;
-            previousAdvanceVec = advanceVec;
+            advanceVec = movePath[pathIndex] - shipTransform.position;
+            advanceVec.Normalize();
 
         }
-        if (pathIndex > movePath.Length-1)
+        if (pathIndex > movePath.Length-2)
         {
             moving = false;
         }

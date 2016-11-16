@@ -16,6 +16,9 @@ public class swipe : MonoBehaviour
     
     // Update is called once per frame
     bool readingPath = false;
+    public Vector3 previousPoint;
+    public pathAnimator currentPathAnimator;
+    private float minTubeLength = .5f;
     void Update()
     {
         
@@ -29,17 +32,28 @@ public class swipe : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //Returns a ray going from camera through a screen point.
                 if (Physics.Raycast(ray, out hit))
                 {
+
+                    if (Vector3.Distance(previousPoint, hit.point) > minTubeLength)
+                    {
+                        currentPathAnimator.drawTube(previousPoint, hit.point);
+                        previousPoint = hit.point;
+                    }
+
                     transform.position = hit.point;
                     tempPath.Add(hit.point);
+                    
                 }
             }
 
             if (Input.GetButtonUp("Fire1") && readingPath)
             {
                 setPath = false;
+                readingPath = false;
+                masterSelector.deselectAll();
                 path = (Vector3[])tempPath.ToArray(typeof(Vector3));
                 shipController currentController = masterSelector.selectedShip.GetComponent<shipController>();
                 currentController.move(path);
+                tempPath.Clear();
             }
         }
 
