@@ -7,11 +7,12 @@ public class selector : MonoBehaviour
     public bool selectorMode;  // toggles whether or not you can select
     public GameObject[] shipObjs;  // list of all ships
     public GameObject selectedShip;
+
     // Use this for initialization
     void Start()
     {
         shipObjs = GameObject.FindGameObjectsWithTag("ships");  // get current ships
-
+        
 
     }
 
@@ -35,21 +36,23 @@ public class selector : MonoBehaviour
                 if (Physics.Raycast(ray, out hit)) // if that click hits a collider
                 {
 
-                    float prevDist = 10000000;   // inf
+                    float prevDist = 1000000000.0f;   // inf
                     int selectedInt = -1;  // null case
                     for (int i = 0; i < shipObjs.Length; i++)  // step through ships and find nearest to selection
                     {
                         float currentDist = Vector3.Distance(hit.point, shipObjs[i].transform.position);
-
+                        
                         if (currentDist < prevDist)
                         {
                             selectedInt = i;
+                            prevDist = currentDist;
                         }
                         
-                        prevDist = currentDist;
+                        
                     }
 
                     selectedShip = shipObjs[selectedInt];
+                    selectedShip.GetComponent<pathAnimator>();
                     shipController selectedController = shipObjs[selectedInt].GetComponent<shipController>();
                     deselectAll();
                     selectedController.onSelect();
@@ -79,6 +82,7 @@ public class selector : MonoBehaviour
         pathSwipe.previousPoint = selectedShip.transform.position;
         pathSwipe.currentPathAnimator = selectedShip.GetComponent<pathAnimator>();
         waitingUnclick = false;
+        
     }
         
 }

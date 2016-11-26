@@ -35,11 +35,12 @@ public class swipe : MonoBehaviour
 
                     if (Vector3.Distance(previousPoint, hit.point) > minTubeLength)
                     {
-                        currentPathAnimator.drawTube(previousPoint, hit.point);
+                        currentPathAnimator.addLink(previousPoint, hit.point);
                         previousPoint = hit.point;
+                       // print("adding link");
                     }
 
-                    transform.position = hit.point;
+                    //transform.position = hit.point;
                     tempPath.Add(hit.point);
                     
                 }
