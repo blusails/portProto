@@ -76,8 +76,8 @@ public class selector : MonoBehaviour
 
     void toggleSetPath()
     {
-        GameObject pathTrail = GameObject.Find("pathTrail");
-        swipe pathSwipe = pathTrail.GetComponent<swipe>();
+        
+        swipe pathSwipe = GetComponent<swipe>();
         pathSwipe.setPath = true;
         pathSwipe.previousPoint = selectedShip.transform.position;
         pathSwipe.currentPathAnimator = selectedShip.GetComponent<pathAnimator>();

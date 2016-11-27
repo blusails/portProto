@@ -7,7 +7,7 @@ public class shipController : MonoBehaviour {
     public Vector3[] movePath;
     private bool moving = false;
     private int pathIndex=0;
-    private Rigidbody shipRB;
+    //private Rigidbody shipRB;
     private Transform shipTransform;
     public Vector3 advanceVec;
     public Vector3 previousAdvanceVec;
@@ -16,7 +16,7 @@ public class shipController : MonoBehaviour {
     //Use this for initialization
     void Start () {
         indicatorLight = GetComponent<Light>();
-        shipRB = GetComponent<Rigidbody>();
+        //shipRB = GetComponent<Rigidbody>();
         shipTransform = GetComponent<Transform>();
         
     }

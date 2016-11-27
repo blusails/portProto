@@ -10,8 +10,8 @@ public class swipe : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        GameObject masterController = GameObject.Find("masterController");
-        masterSelector = masterController.GetComponent<selector>();
+        
+        masterSelector = GetComponent<selector>();
     }
     
     // Update is called once per frame
