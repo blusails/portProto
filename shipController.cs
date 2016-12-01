@@ -11,6 +11,7 @@ public class shipController : MonoBehaviour {
     private Transform shipTransform;
     public Vector3 advanceVec;
     public Vector3 previousAdvanceVec;
+    private pathAnimator shipPathAnimator;
     private float indicatorLightFrequency = 5.0f;
     private float minPathSpacing = 5.0f;  // number of moveSteps adjacent movePath values must be apart
     private float tolAngle=30.0f;
@@ -25,6 +26,7 @@ public class shipController : MonoBehaviour {
         indicatorLight = GetComponent<Light>();
         shipRB = GetComponent<Rigidbody>();
         shipTransform = GetComponent<Transform>();
+        shipPathAnimator = GetComponent<pathAnimator>();
         updateGlobalVars();
         moveStep = speed * maxMoveStep; // calculation moveStep and ensure it's within global params
         if (moveStep < minMoveStep) moveStep = minMoveStep;
@@ -51,13 +53,14 @@ public class shipController : MonoBehaviour {
     {
         isSelected = true;
         indicatorLight.intensity = 30.0f;  // turn on indicatorLight
-        
+        shipPathAnimator.renderPathSelected();
     }
 
     public void onDeselect()
     {
         isSelected = false;
         indicatorLight.intensity = 0.0f;  // turn off indicatorLight
+        shipPathAnimator.renderPathDeSelected();
     }
 
     void updateGlobalVars()

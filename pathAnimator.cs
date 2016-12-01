@@ -2,35 +2,79 @@
 using System.Collections;
 
 public class pathAnimator : MonoBehaviour {
-    public float tubeDiameter;
+    private float tubeDiameter;
     private GameObject tube;
     private GameObject pathIndicatorChain;
     private Mesh chainMesh;
     private bool pathActive=false;
     private ArrayList tubeList = new ArrayList();
-    private Vector3 upOffset = Vector3.up * 0.1f;
+    private float yOffset;
+    private Vector3 upOffset;
+    private Renderer chainRenderer;
+    private Material chainMaterialS;
+    private Material chainMaterialNS;
 
-    //void Start()
-    //{
-    //    GameObject pathIndicatorChain = GameObject.CreatePrimitive(PrimitiveType.Plane);
-    //    DestroyImmediate(pathIndicatorChain.GetComponent<MeshCollider>());
-    //    // get mesh
-    //    chainMesh = pathIndicatorChain.GetComponent<MeshFilter>().sharedMesh;
-    //   //chainMesh.Clear();
-    //}
+    void Start()
+    {
+        chainMaterialS = Resources.Load("pathMaterialS", typeof(Material)) as Material;
+        chainMaterialNS = Resources.Load("pathMaterialNS", typeof(Material)) as Material;
+        updateGlobalVars();
+        upOffset = Vector3.up * yOffset;
+        
+    }
 
+    void updateGlobalVars()
+    {
+        GameObject masterController = GameObject.Find("masterController");
+        globalShipParams gSP = masterController.GetComponent<globalShipParams>();
+        yOffset= gSP.pathRenderYOffset;
+        tubeDiameter = gSP.pathRenderWidth;
+
+
+    }
+
+    public void renderPathOff()
+    {
+        if (pathActive) chainRenderer.enabled = false;
+    }
+
+    public void renderPathOn()
+    {
+        if (pathActive) chainRenderer.enabled = true;
+        
+    }
+
+    public void renderPathSelected()
+    {
+        if (pathActive) chainRenderer.material = chainMaterialS;
+    }
+
+    public void renderPathDeSelected()
+    {
+        if (pathActive) chainRenderer.material = chainMaterialNS;
+    }
+
+
+    public void killPath()
+    {
+        //renderPathOff();
+        Destroy(pathIndicatorChain);
+        pathActive = false;
+    }
     public void createPathIndicatorChain(Vector3 startPoint, Vector3 stopPoint)
     {
         pathActive = true;
         // create object, remove collider
-        GameObject pathIndicatorChain = new GameObject();
+        pathIndicatorChain = new GameObject();
         pathIndicatorChain.AddComponent<MeshFilter>();
         pathIndicatorChain.AddComponent<MeshRenderer>();
         // get mesh
         Mesh blankMesh = new Mesh();
         pathIndicatorChain.GetComponent<MeshFilter>().mesh = blankMesh;
         chainMesh = pathIndicatorChain.GetComponent<MeshFilter>().mesh;
-       // chainMesh.Clear();
+        chainRenderer = pathIndicatorChain.GetComponent<Renderer>();
+        chainRenderer.material = chainMaterialS;
+        // chainMesh.Clear();
         // assign vertices
         Vector3 towardVec = stopPoint - startPoint;
         Vector3 left = Vector3.Normalize(Vector3.Cross(Vector3.up, towardVec));
